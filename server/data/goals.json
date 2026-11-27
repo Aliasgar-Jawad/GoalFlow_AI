@@ -1,0 +1,472 @@
+[
+  {
+    "status": "active",
+    "isServerFallback": true,
+    "smart_goal": {
+      "statement": "Achieve mastery in \"Master Machine Learning Foundations\" by completing structured milestones, practical exercises, and verifiable checkpoints between 2026-11-21 and 2026-12-28, allocating 300 minutes weekly.",
+      "measurement": "Portfolio of completed practical tasks, verified key results evidence, and 100% milestone criteria satisfaction.",
+      "completion_evidence": [
+        "Published project repository or demonstration for \"Master Machine Learning Foundations\"",
+        "Self-assessment score >= 85% across core competency checkpoints",
+        "Verified weekly activity logs confirming 300 minutes/week effort adherence"
+      ],
+      "assumptions": [
+        "User has steady access to stated resources: Laptop, Python, Kaggle, Coursera",
+        "Weekly availability constraint (300 mins) is strictly respected",
+        "Blackout dates are completely protected from task scheduling"
+      ],
+      "questions": []
+    },
+    "objectives": [
+      {
+        "id": "obj-1",
+        "title": "Core Foundations & Tooling Mastery",
+        "key_result": "Master basic principles, syntax, and essential development workflows.",
+        "baseline": 0,
+        "target": 3,
+        "current": 0,
+        "unit": "modules",
+        "dueDate": "2026-11-30",
+        "evidence": "Structured notes and foundational exercise codebase"
+      },
+      {
+        "id": "obj-2",
+        "title": "Applied Implementation & Problem Solving",
+        "key_result": "Build 2 guided projects with zero critical bugs.",
+        "baseline": 0,
+        "target": 2,
+        "current": 0,
+        "unit": "projects",
+        "dueDate": "2026-12-18",
+        "evidence": "Documented source code with passing test runs"
+      },
+      {
+        "id": "obj-3",
+        "title": "Capstone Delivery & Viva Showcase",
+        "key_result": "Complete final deliverable and present demonstration.",
+        "baseline": 0,
+        "target": 1,
+        "current": 0,
+        "unit": "demonstrations",
+        "dueDate": "2026-12-28",
+        "evidence": "Live demo and presentation documentation"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-1",
+        "title": "M1: Environment Setup & Core Foundations",
+        "dueDate": "2026-11-30",
+        "objectiveId": "obj-1",
+        "acceptanceCriteria": "Tools configured, environment ready, fundamental concepts summarized.",
+        "status": "pending"
+      },
+      {
+        "id": "ms-2",
+        "title": "M2: Guided Implementation Project",
+        "dueDate": "2026-12-09",
+        "objectiveId": "obj-2",
+        "acceptanceCriteria": "First working prototype built and tested successfully.",
+        "status": "pending"
+      },
+      {
+        "id": "ms-3",
+        "title": "M3: Advanced Optimization & Features",
+        "dueDate": "2026-12-18",
+        "objectiveId": "obj-2",
+        "acceptanceCriteria": "Complex features and optimizations executed and documented.",
+        "status": "pending"
+      },
+      {
+        "id": "ms-4",
+        "title": "M4: Capstone Evaluation & Showcase",
+        "dueDate": "2026-12-28",
+        "objectiveId": "obj-3",
+        "acceptanceCriteria": "Final evaluation complete and deliverable published.",
+        "status": "pending"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "task-1",
+        "title": "Set up tools, IDE, and development workspace for Master Machine Learning Foundations",
+        "milestoneId": "ms-1",
+        "date": "2026-11-23",
+        "duration": 45,
+        "priority": "High",
+        "dependency": null,
+        "completed": false
+      },
+      {
+        "id": "task-2",
+        "title": "Complete foundational review and initial syntax exercises",
+        "milestoneId": "ms-1",
+        "date": "2026-11-26",
+        "duration": 45,
+        "priority": "Medium",
+        "dependency": "task-1",
+        "completed": false
+      },
+      {
+        "id": "task-3",
+        "title": "Build first practical prototype focusing on core requirements",
+        "milestoneId": "ms-2",
+        "date": "2026-12-03",
+        "duration": 45,
+        "priority": "High",
+        "dependency": "task-2",
+        "completed": false
+      },
+      {
+        "id": "task-4",
+        "title": "Conduct error-handling tests and document edge cases",
+        "milestoneId": "ms-2",
+        "date": "2026-12-07",
+        "duration": 45,
+        "priority": "Medium",
+        "dependency": "task-3",
+        "completed": false
+      },
+      {
+        "id": "task-5",
+        "title": "Implement advanced optimization and refine key algorithms",
+        "milestoneId": "ms-3",
+        "date": "2026-12-15",
+        "duration": 45,
+        "priority": "High",
+        "dependency": "task-4",
+        "completed": false
+      },
+      {
+        "id": "task-6",
+        "title": "Deploy final capstone version and prepare evaluation summary",
+        "milestoneId": "ms-4",
+        "date": "2026-12-24",
+        "duration": 45,
+        "priority": "High",
+        "dependency": "task-5",
+        "completed": false
+      }
+    ],
+    "risks": [
+      {
+        "obstacle": "Academic workload and exam pressure interfering with target schedule.",
+        "backupAction": "Leverage configured blackout protection and reschedule non-critical tasks."
+      },
+      {
+        "obstacle": "Technical roadblocks or complex bugs slowing progress.",
+        "backupAction": "Consult documentation, break down tasks into 30-minute micro-sessions."
+      }
+    ],
+    "id": "goal-1795434093879",
+    "title": "Master Machine Learning Foundations",
+    "motivation": "Prepare for upcoming campus AI placement and build a computer vision portfolio.",
+    "level": "Intermediate",
+    "startDate": "2026-11-21",
+    "deadline": "2026-12-28",
+    "weeklyCapacityMinutes": 300,
+    "sessionLength": 45,
+    "blackoutDates": [
+      "2026-12-10",
+      "2026-12-11",
+      "2026-12-12"
+    ],
+    "resources": "Laptop, Python, Kaggle, Coursera",
+    "budget": "$0 (Free resources only)",
+    "validation": {
+      "passed": true,
+      "checks": [
+        {
+          "rule": "Goal timeline bounds",
+          "passed": true,
+          "message": "Timeline valid: 2026-11-21 to 2026-12-28."
+        },
+        {
+          "rule": "Positive durations",
+          "passed": true,
+          "message": "All tasks have verified positive durations."
+        },
+        {
+          "rule": "Task date bounds",
+          "passed": true,
+          "message": "All tasks are scheduled within goal start and deadline."
+        },
+        {
+          "rule": "Blackout / Exam dates",
+          "passed": true,
+          "message": "Exam and blackout dates strictly protected."
+        },
+        {
+          "rule": "Task-to-Milestone association",
+          "passed": true,
+          "message": "All tasks roll up cleanly to milestones."
+        },
+        {
+          "rule": "Milestone-to-Objective association",
+          "passed": true,
+          "message": "All milestones support a measurable objective."
+        },
+        {
+          "rule": "Measurable Key Results",
+          "passed": true,
+          "message": "All key results have verifiable targets and evidence."
+        },
+        {
+          "rule": "Dependency Graph (DAG)",
+          "passed": true,
+          "message": "Dependency graph is acyclic and topologically sorted."
+        },
+        {
+          "rule": "Weekly Capacity",
+          "passed": true,
+          "message": "Workload (1.5h/wk) fits within available budget (5.0h/wk)."
+        }
+      ],
+      "capacityMismatch": false,
+      "plannedWeeklyHours": "1.5",
+      "allowedWeeklyHours": 5
+    },
+    "updatedAt": "2026-11-23T11:41:57.271Z"
+  },
+  {
+    "id": "demo-goal-ml-2026",
+    "isDemo": true,
+    "title": "Become proficient in Machine Learning",
+    "motivation": "Secure a summer ML internship and build an end-to-end predictive model for college project.",
+    "level": "Beginner",
+    "startDate": "2026-11-21",
+    "deadline": "2026-12-28",
+    "weeklyCapacityMinutes": 300,
+    "sessionLength": 45,
+    "blackoutDates": [
+      "2026-12-10",
+      "2026-12-11",
+      "2026-12-12"
+    ],
+    "resources": "Laptop, Python 3.11, Google Colab, Scikit-Learn Docs",
+    "budget": "$0 (Free / Open Source)",
+    "status": "active",
+    "createdAt": "2026-11-21T10:00:00Z",
+    "smart_goal": {
+      "statement": "Master foundational machine learning algorithms by implementing, training, and evaluating 3 real-world tabular and classification models with >85% accuracy before December 28, 2026, investing 5 hours per week.",
+      "measurement": "3 deployed GitHub repositories with Jupyter notebooks and documented F1/Accuracy scores > 85%.",
+      "completion_evidence": [
+        "GitHub repository containing Linear & Logistic Regression from scratch",
+        "Kaggle Titanic competition submission notebook with >82% accuracy",
+        "Final capstone: Customer churn predictor deployed with Streamlit on Hugging Face Spaces"
+      ],
+      "assumptions": [
+        "Learner has basic familiarity with Python syntax.",
+        "High-school level linear algebra and statistics knowledge.",
+        "No high-end GPU required for Scikit-Learn tabular models."
+      ],
+      "questions": []
+    },
+    "objectives": [
+      {
+        "id": "obj-1",
+        "title": "Data Manipulation & EDA with NumPy & Pandas",
+        "key_result": "Clean and explore 3 distinct datasets with zero unhandled nulls and 5 Seaborn plots each.",
+        "baseline": 0,
+        "target": 3,
+        "current": 2,
+        "unit": "datasets",
+        "dueDate": "2026-12-01",
+        "evidence": "Jupyter notebooks with statistical distribution summaries"
+      },
+      {
+        "id": "obj-2",
+        "title": "Supervised Learning Algorithms Mastery",
+        "key_result": "Train and compare 4 algorithms (Linear, Logistic, Random Forest, XGBoost) using cross-validation.",
+        "baseline": 0,
+        "target": 4,
+        "current": 1,
+        "unit": "models",
+        "dueDate": "2026-12-18",
+        "evidence": "Confusion matrices and ROC-AUC comparison curves"
+      },
+      {
+        "id": "obj-3",
+        "title": "End-to-End Model Evaluation & Deployment",
+        "key_result": "Deploy a trained model with an interactive UI accessible online.",
+        "baseline": 0,
+        "target": 1,
+        "current": 0,
+        "unit": "web apps",
+        "dueDate": "2026-12-28",
+        "evidence": "Live Streamlit / Hugging Face demo link"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-1",
+        "title": "M1: Mathematical Tooling & Exploratory Data Analysis",
+        "dueDate": "2026-12-01",
+        "objectiveId": "obj-1",
+        "acceptanceCriteria": "Load Kaggle CSV, clean missing values, handle categorical encoding, and generate correlation heatmaps.",
+        "status": "in-progress"
+      },
+      {
+        "id": "ms-2",
+        "title": "M2: Classical Supervised Regression & Classification",
+        "dueDate": "2026-12-09",
+        "objectiveId": "obj-2",
+        "acceptanceCriteria": "Build Logistic Regression and Decision Tree pipelines with 5-fold cross-validation.",
+        "status": "pending"
+      },
+      {
+        "id": "ms-3",
+        "title": "M3: Ensemble Methods & Hyperparameter Tuning",
+        "dueDate": "2026-12-19",
+        "objectiveId": "obj-2",
+        "acceptanceCriteria": "Tune Random Forest using GridSearchCV with test accuracy surpassing baseline by >7%.",
+        "status": "pending"
+      },
+      {
+        "id": "ms-4",
+        "title": "M4: Capstone Model Deployment & Viva Presentation Prep",
+        "dueDate": "2026-12-28",
+        "objectiveId": "obj-3",
+        "acceptanceCriteria": "Web UI demo working with slide deck summarizing learning objectives and performance metrics.",
+        "status": "pending"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "task-1",
+        "title": "Setup Python virtual environment and install NumPy, Pandas, Scikit-Learn",
+        "milestoneId": "ms-1",
+        "date": "2026-11-21",
+        "duration": 45,
+        "priority": "High",
+        "dependency": null,
+        "completed": true
+      },
+      {
+        "id": "task-2",
+        "title": "NumPy array vectorization and matrix multiplication practice",
+        "milestoneId": "ms-1",
+        "date": "2026-11-23",
+        "duration": 45,
+        "priority": "Medium",
+        "dependency": "task-1",
+        "completed": true
+      },
+      {
+        "id": "task-3",
+        "title": "Pandas data cleaning: Handling NaNs and One-Hot Encoding on Titanic dataset",
+        "milestoneId": "ms-1",
+        "date": "2026-11-25",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-2",
+        "completed": false
+      },
+      {
+        "id": "task-4",
+        "title": "Matplotlib & Seaborn visualization: Plot feature correlations and outliers",
+        "milestoneId": "ms-1",
+        "date": "2026-11-28",
+        "duration": 60,
+        "priority": "Medium",
+        "dependency": "task-3",
+        "completed": false
+      },
+      {
+        "id": "task-5",
+        "title": "Implement Linear Regression cost function and gradient descent from scratch",
+        "milestoneId": "ms-2",
+        "date": "2026-12-02",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-4",
+        "completed": false
+      },
+      {
+        "id": "task-6",
+        "title": "Build Logistic Regression binary classifier using Scikit-Learn Pipeline",
+        "milestoneId": "ms-2",
+        "date": "2026-12-05",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-5",
+        "completed": false
+      },
+      {
+        "id": "task-7",
+        "title": "Evaluate classification metrics: Precision, Recall, F1-Score, and ROC-AUC",
+        "milestoneId": "ms-2",
+        "date": "2026-12-08",
+        "duration": 45,
+        "priority": "Medium",
+        "dependency": "task-6",
+        "completed": false
+      },
+      {
+        "id": "task-8",
+        "title": "Train Random Forest and Gradient Boosted Trees on tabular data",
+        "milestoneId": "ms-3",
+        "date": "2026-12-14",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-7",
+        "completed": false
+      },
+      {
+        "id": "task-9",
+        "title": "Optimize model hyperparameters using RandomizedSearchCV",
+        "milestoneId": "ms-3",
+        "date": "2026-12-17",
+        "duration": 60,
+        "priority": "Medium",
+        "dependency": "task-8",
+        "completed": false
+      },
+      {
+        "id": "task-10",
+        "title": "Save best model pipeline with joblib and write inference script",
+        "milestoneId": "ms-4",
+        "date": "2026-12-21",
+        "duration": 45,
+        "priority": "Medium",
+        "dependency": "task-9",
+        "completed": false
+      },
+      {
+        "id": "task-11",
+        "title": "Create interactive Streamlit web dashboard for user inputs",
+        "milestoneId": "ms-4",
+        "date": "2026-12-23",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-10",
+        "completed": false
+      },
+      {
+        "id": "task-12",
+        "title": "Deploy app to Hugging Face Spaces and prepare viva presentation slides",
+        "milestoneId": "ms-4",
+        "date": "2026-12-26",
+        "duration": 60,
+        "priority": "High",
+        "dependency": "task-11",
+        "completed": false
+      }
+    ],
+    "risks": [
+      {
+        "obstacle": "Overwhelmed by theoretical mathematical proofs (matrix calculus).",
+        "backupAction": "Adopt top-down code-first intuition using Scikit-Learn visualization before deep dive."
+      },
+      {
+        "obstacle": "College Midterms between Dec 10-12 causing plan delay.",
+        "backupAction": "Zero tasks scheduled during blackout window; load balanced into post-midterm weeks."
+      },
+      {
+        "obstacle": "Model overfitting on small training samples.",
+        "backupAction": "Enforce K-fold cross-validation and L2 regularization early."
+      }
+    ],
+    "updatedAt": "2026-11-26T10:58:52.488Z"
+  }
+]

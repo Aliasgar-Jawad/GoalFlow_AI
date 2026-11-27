@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalFlow AI — The Deterministic Goal Operating System</title>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+    <!-- 3D WebGL Interactive Background Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Ambient Vignette Layer -->
+    <div class="viewport-overlay"></div>
+
+    <div class="landing-wrapper">
+        <!-- Top Navigation Bar -->
+        <header class="landing-nav">
+            <div class="container nav-container">
+                <a href="landing.html" class="nav-brand">
+                    <div class="brand-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <span class="brand-name">GoalFlow <span class="badge-ai">AI</span></span>
+                </a>
+
+                <nav class="nav-links">
+                    <a href="#simulator" class="nav-link">Interactive Simulator</a>
+                    <a href="#architecture" class="nav-link">Architecture</a>
+                    <a href="#comparison" class="nav-link">Why GoalFlow</a>
+                    <a href="#research" class="nav-link">Viva Benchmarks</a>
+                </nav>
+
+                <div class="nav-actions">
+                    <a href="AI.html" class="btn btn-secondary btn-sm" title="Explore Loaded Demo">Explore Demo</a>
+                    <a href="AI.html#planner" class="btn btn-primary btn-sm" title="Launch GoalFlow Planner">
+                        <span>Launch Workspace</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="container">
+                    <div class="hero-pill-badge">
+                        <span class="pulse-dot"></span>
+                        <span>The Deterministic Goal Operating System &bull; Powered by Gemini</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        Where ambition meets <br>
+                        <span class="text-gradient">mathematical certainty.</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Standard AI planners output vague to-do lists that ignore calendar capacity and collapse under pressure. 
+                        GoalFlow fuses generative AI with a deterministic validation engine to balance weekly hours, protect exam blackouts, and generate verified, executable task roadmaps.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="AI.html#planner" class="btn btn-primary btn-lg">
+                            <span>Launch Workspace &amp; Build Goal</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                        <a href="#simulator" class="btn btn-secondary btn-lg">
+                            <span>Test Live Simulator</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <polyline points="19 12 12 19 5 12"></polyline>
+                            </svg>
+                        </a>
+                        <a href="AI.html" class="btn btn-outline btn-lg">
+                            <span>Explore ML Demo</span>
+                        </a>
+                    </div>
+
+                    <!-- 3D Perspective Hero Showcase (Interactive Cockpit) -->
+                    <div class="hero-showcase-perspective">
+                        <div class="hero-cockpit-card">
+                            <div class="cockpit-top-bar">
+                                <div class="window-dots">
+                                    <div class="window-dot"></div>
+                                    <div class="window-dot"></div>
+                                    <div class="window-dot"></div>
+                                </div>
+                                <span class="cockpit-title-tag">GOALFLOW AUTONOMOUS ENGINE &bull; LIVE VALIDATION INSTANCE</span>
+                                <span class="cockpit-badge-safe">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>Capacity Balanced</span>
+                                </span>
+                            </div>
+
+                            <div class="cockpit-content">
+                                <!-- Cockpit Left Panel -->
+                                <div class="cockpit-left-panel">
+                                    <h3 class="cockpit-goal-title">Become proficient in Machine Learning</h3>
+                                    <div class="cockpit-smart-box">
+                                        <strong>Formal SMART Clarification:</strong>
+                                        <p>Build, train, and deploy 3 production-grade ML models with >85% accuracy by Dec 28, 2026 without calendar overload.</p>
+                                    </div>
+                                    <div class="cockpit-metrics-grid">
+                                        <div class="cockpit-metric">
+                                            <div class="cockpit-metric-val">35 Days</div>
+                                            <div class="cockpit-metric-lbl">Target Horizon</div>
+                                        </div>
+                                        <div class="cockpit-metric">
+                                            <div class="cockpit-metric-val">5.0 hrs</div>
+                                            <div class="cockpit-metric-lbl">Weekly Budget</div>
+                                        </div>
+                                        <div class="cockpit-metric">
+                                            <div class="cockpit-metric-val">12 Tasks</div>
+                                            <div class="cockpit-metric-lbl">45-Min Micro Sessions</div>
+                                        </div>
+                                        <div class="cockpit-metric">
+                                            <div class="cockpit-metric-val">0 Loops</div>
+                                            <div class="cockpit-metric-lbl">DAG Dependency Check</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Cockpit Right Panel -->
+                                <div class="cockpit-right-panel">
+                                    <div class="cockpit-panel-heading">
+                                        <span>CHRONOLOGICAL MILESTONES (DAG)</span>
+                                        <span class="text-cyan font-mono">4 Milestones</span>
+                                    </div>
+                                    <div class="timeline-mini-nodes">
+                                        <div class="t-node">
+                                            <div class="t-node-num">01</div>
+                                            <div class="t-node-title">Python &amp; Exploratory Data Analysis Mastery</div>
+                                            <div class="t-node-date">Dec 01</div>
+                                        </div>
+                                        <div class="t-node">
+                                            <div class="t-node-num">02</div>
+                                            <div class="t-node-title">Classical ML Algorithms &amp; Cross-Validation</div>
+                                            <div class="t-node-date">Dec 10</div>
+                                        </div>
+                                        <div class="t-node">
+                                            <div class="t-node-num">03</div>
+                                            <div class="t-node-title">Deep Learning with PyTorch &amp; Transfer Learning</div>
+                                            <div class="t-node-date">Dec 20</div>
+                                        </div>
+                                        <div class="t-node">
+                                            <div class="t-node-num">04</div>
+                                            <div class="t-node-title">Model Deployment via FastAPI &amp; Docker Container</div>
+                                            <div class="t-node-date">Dec 28</div>
+                                        </div>
+                                    </div>
+                                    <div class="cockpit-capacity-bar-wrap">
+                                        <div class="cap-bar-header">
+                                            <span>Weekly Workload Feasibility</span>
+                                            <strong class="font-mono text-cyan">4.5h / 5.0h (90%)</strong>
+                                        </div>
+                                        <div class="cap-track">
+                                            <div class="cap-fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Live Simulator Section -->
+            <section id="simulator" class="simulator-section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Interactive Simulation</span>
+                        <h2 class="section-title">Test the 5-Stage Engine Live</h2>
+                        <p class="section-desc">
+                            Select a goal profile below to watch the autonomous planning engine decompose and validate ambitious targets in real time.
+                        </p>
+                    </div>
+
+                    <div class="simulator-widget-box">
+                        <!-- Preset Chips -->
+                        <div class="sim-preset-chips">
+                            <button class="sim-chip active" data-preset="ml">Machine Learning Mastery</button>
+                            <button class="sim-chip" data-preset="gpa">9.5+ College Semester GPA</button>
+                            <button class="sim-chip" data-preset="mvp">AI Startup MVP in 60 Days</button>
+                            <button class="sim-chip" data-preset="interview">Google SWE Technical Interviews</button>
+                        </div>
+
+                        <!-- Simulator Display Grid -->
+                        <div class="sim-display-grid">
+                            <!-- Left: Stages Selector -->
+                            <div class="sim-pipeline-stages">
+                                <button class="sim-stage-tab active" data-stage="clarify">
+                                    <span class="sim-stage-num">01</span>
+                                    <span>SMART Clarifier</span>
+                                </button>
+                                <button class="sim-stage-tab" data-stage="objectives">
+                                    <span class="sim-stage-num">02</span>
+                                    <span>Objectives &amp; KRs</span>
+                                </button>
+                                <button class="sim-stage-tab" data-stage="milestones">
+                                    <span class="sim-stage-num">03</span>
+                                    <span>Milestone DAG</span>
+                                </button>
+                                <button class="sim-stage-tab" data-stage="tasks">
+                                    <span class="sim-stage-num">04</span>
+                                    <span>45-Min Micro Tasks</span>
+                                </button>
+                                <button class="sim-stage-tab" data-stage="validation">
+                                    <span class="sim-stage-num">05</span>
+                                    <span>Logic Validator</span>
+                                </button>
+                            </div>
+
+                            <!-- Right: Dynamic Stage Breakdown -->
+                            <div class="sim-tab-content-area">
+                                <div>
+                                    <h3 class="sim-pane-title" id="sim-pane-title">Stage 01: SMART Goal Formalization</h3>
+                                    <p class="sim-pane-body" id="sim-pane-desc">Transforms ambiguous aspiration into mathematically verifiable conditions of satisfaction.</p>
+                                    <ul class="sim-items-list" id="sim-pane-list">
+                                        <!-- Injected by landing.js -->
+                                    </ul>
+                                </div>
+
+                                <div class="sim-footer-cta">
+                                    <span class="text-sm text-muted">Ready to execute this plan in the full application?</span>
+                                    <button class="btn btn-primary btn-sm" id="sim-launch-btn">
+                                        <span>Open in GoalFlow Workspace &rarr;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4 Architectural Pillars Section -->
+            <section id="architecture" class="pillars-section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">System Architecture</span>
+                        <h2 class="section-title">Engineered Against Human Failure Modes</h2>
+                        <p class="section-desc">
+                            GoalFlow is not another to-do list. It is an algorithmic framework that solves the psychological and logistical reasons people fail their goals.
+                        </p>
+                    </div>
+
+                    <div class="pillars-grid">
+                        <!-- Pillar 1 -->
+                        <div class="pillar-card">
+                            <div class="pillar-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Deterministic Capacity Guard</h3>
+                            <p class="pillar-text">
+                                Prevents cognitive burnout before it starts. The mathematical validation engine guarantees planned weekly minutes will never exceed your confirmed budget.
+                            </p>
+                        </div>
+
+                        <!-- Pillar 2 -->
+                        <div class="pillar-card">
+                            <div class="pillar-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Exam &amp; Blackout Protection</h3>
+                            <p class="pillar-text">
+                                Never schedules tasks during midterm exams, travel dates, or critical deadlines. Hard calendar constraints are strictly respected by the scheduling algorithms.
+                            </p>
+                        </div>
+
+                        <!-- Pillar 3 -->
+                        <div class="pillar-card">
+                            <div class="pillar-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">DAG Topological Sort</h3>
+                            <p class="pillar-text">
+                                Guarantees zero circular dependencies. High-level tasks are broken down into a Directed Acyclic Graph so prerequisites are always completed in strict sequence.
+                            </p>
+                        </div>
+
+                        <!-- Pillar 4 -->
+                        <div class="pillar-card">
+                            <div class="pillar-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                            </div>
+                            <h3 class="pillar-title">Effort vs Outcome Separation</h3>
+                            <p class="pillar-text">
+                                Solves the busywork illusion. Measures actual verified deliverables and key result evidence separately from hours logged, so you never confuse effort with mastery.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Direct Comparison Section -->
+            <section id="comparison" class="comparison-section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Direct Benchmark</span>
+                        <h2 class="section-title">Generic AI vs GoalFlow Deterministic AI</h2>
+                        <p class="section-desc">
+                            Why prompting generic chatbots produces plans that fail within two weeks.
+                        </p>
+                    </div>
+
+                    <div class="comparison-box">
+                        <!-- Bad: Generic Chatbot -->
+                        <div class="comp-card comp-bad">
+                            <span class="comp-badge">Standard Chatbot (ChatGPT / Claude Prompt)</span>
+                            <h3 class="comp-title">Stochastic &amp; Unguarded</h3>
+                            <ul class="comp-list">
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Hallucinates impossible schedules:</strong> Recommends 30 hours of tasks in a week where you have 5 hours available.</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Zero calendar awareness:</strong> Schedules intensive study sessions directly during college exams.</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Vague completion metrics:</strong> "Learn Python" instead of verifiable pass/fail acceptance criteria.</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Ephemeral output:</strong> Disappears in chat history with zero persistent tracking or review loops.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Good: GoalFlow Engine -->
+                        <div class="comp-card comp-good">
+                            <span class="comp-badge">GoalFlow Deterministic Engine</span>
+                            <h3 class="comp-title">Mathematical &amp; Validated</h3>
+                            <ul class="comp-list">
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Mathematical capacity budget:</strong> JavaScript logic engine balances tasks to fit your exact weekly capacity.</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Hard blackout shielding:</strong> Zero tasks scheduled during exams or personal blackout dates.</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Empirical acceptance criteria:</strong> Every milestone requires tangible evidence (code, test score, deploy).</span>
+                                </li>
+                                <li>
+                                    <span>&bull;</span>
+                                    <span><strong>Full-stack persistent architecture:</strong> Node.js REST API with offline fallback and weekly AI coach reviews.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Academic & Viva Benchmarks Banner -->
+            <div class="stats-banner" id="research">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <h3>100%</h3>
+                            <p>DAG Topological Validation</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>4 Languages</h3>
+                            <p>English, Hindi, Spanish, French i18n</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>&lt;45ms</h3>
+                            <p>Deterministic Engine Latency</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>Zero Dep</h3>
+                            <p>Built-in Node.js Backend Server</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Section -->
+            <section class="cta-hero-section">
+                <div class="container">
+                    <div class="cta-box">
+                        <h2>Ready to execute with mathematical precision?</h2>
+                        <p>
+                            Join students and engineers who have transformed ambiguous ambitions into validated, completed goals.
+                        </p>
+                        <a href="AI.html#planner" class="btn btn-primary btn-lg">
+                            <span>Open GoalFlow Workspace</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <div class="container footer-content">
+                <span>GoalFlow AI &copy; 2026 &bull; Engineered by Ali Jawad &bull; Antigravity AI &amp; Google Gemini</span>
+                <div class="footer-links">
+                    <a href="AI.html">App Workspace</a>
+                    <a href="AI.html#settings">System Settings</a>
+                    <a href="AI.html#prompt-lab">Prompt Lab</a>
+                    <a href="GoalFlow_AI_Features_and_Architecture_Report.pdf" target="_blank">PDF Technical Report</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Three.js from Cloudflare CDN for 3D Background Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="landing.js"></script>
+</body>
+</html>

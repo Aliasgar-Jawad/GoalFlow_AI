@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalFlow AI — AI Goal Planning Assistant & Backend</title>
+    <link rel="stylesheet" href="AI.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+    <!-- Global Notification Banner / Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Presentation Mode Exit Floating Button -->
+    <div id="presentation-exit-bar" class="presentation-exit-bar hidden">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><strong>Presentation Mode Active</strong> — viva demonstration view</span>
+        <div class="presentation-controls">
+            <button id="pres-prev-step-btn" class="btn btn-sm btn-ghost">&larr; Prev Step</button>
+            <span id="pres-step-indicator" class="pres-step-pill">Step 1 of 5</span>
+            <button id="pres-next-step-btn" class="btn btn-sm btn-ghost">Next Step &rarr;</button>
+            <button id="exit-presentation-btn" class="btn btn-sm btn-danger">Exit Presentation</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h2>GoalFlow <span class="badge-ai">AI</span></h2>
+                        <span class="tagline" data-i18n="tagline">Turn ambition into progress</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Goal Mini-Card -->
+            <div class="sidebar-active-goal" id="sidebar-active-goal-box">
+                <div class="goal-mini-header">
+                    <span class="pill-status pill-ontrack" id="sidebar-goal-badge">ON TRACK</span>
+                    <span class="goal-pct" id="sidebar-goal-pct">0%</span>
+                </div>
+                <h4 id="sidebar-goal-title">No Active Goal</h4>
+                <div class="mini-progress-bar">
+                    <div class="mini-progress-fill" id="sidebar-progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-label" data-i18n="nav_main">MAIN</span>
+                <button class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+                    <span data-i18n="nav_dashboard">Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="my-goals">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+                    <span data-i18n="nav_my_goals">My Goals</span>
+                    <span class="nav-badge" id="goals-count-badge">0</span>
+                </button>
+                <button class="nav-item" data-view="planner">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+                    <span data-i18n="nav_ai_planner">AI Planner</span>
+                    <span class="nav-tag">5-Stage</span>
+                </button>
+                <button class="nav-item" data-view="timeline">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                    <span data-i18n="nav_timeline">Timeline</span>
+                </button>
+                <button class="nav-item" data-view="tasks">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+                    <span data-i18n="nav_tasks">Tasks</span>
+                    <span class="nav-badge" id="tasks-count-badge">0</span>
+                </button>
+
+                <span class="nav-section-label" data-i18n="nav_analytics">ANALYTICS & COACH</span>
+                <button class="nav-item" data-view="progress">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></span>
+                    <span data-i18n="nav_achievements">Achievements</span>
+                </button>
+                <button class="nav-item" data-view="review">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+                    <span data-i18n="nav_review">Weekly Review</span>
+                </button>
+                <button class="nav-item" data-view="prompt-lab">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span>
+                    <span data-i18n="nav_prompt_lab">Prompt Lab</span>
+                    <span class="nav-tag nav-tag-viva">Viva Demo</span>
+                </button>
+
+                <span class="nav-section-label" data-i18n="nav_system">SYSTEM</span>
+                <button class="nav-item" data-view="settings">
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                    <span data-i18n="nav_settings">Settings</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="api-status-pill" id="sidebar-api-status">
+                    <span class="status-dot status-active"></span>
+                    <span id="api-status-text">Backend / Gemini</span>
+                </div>
+                <button class="btn btn-outline btn-sm btn-full" id="btn-toggle-presentation" data-i18n="btn_presentation">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>Presentation Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Top App Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="btn-icon mobile-menu-toggle" id="sidebar-toggle-btn" aria-label="Toggle Navigation">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <div class="header-breadcrumb">
+                        <span id="view-breadcrumb-category" data-i18n="breadcrumb_workspace">Workspace</span>
+                        <span class="separator">/</span>
+                        <span class="active-page" id="view-breadcrumb-page">Dashboard</span>
+                    </div>
+
+                    <!-- Spotlight Command Palette Search Pill -->
+                    <button class="command-palette-trigger" id="btn-open-command-palette" title="Quick Actions (Cmd+K / Ctrl+K)">
+                        <svg class="cmd-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <span class="cmd-text" data-i18n="cmd_placeholder">Search or jump to...</span>
+                        <kbd class="cmd-shortcut">⌘K</kbd>
+                    </button>
+                </div>
+
+                <div class="header-center">
+                    <!-- Backend Connection Status Pill -->
+                    <div class="backend-status-pill" id="backend-status-badge" title="Node.js Server & Google Gemini Status">
+                        <span class="status-dot status-active" id="backend-dot"></span>
+                        <span id="backend-status-text">Checking Backend...</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Language Switcher Dropdown (i18n) -->
+                    <div class="lang-selector-wrap" title="Change Language / भाषा बदलें / Cambiar idioma / Changer de langue">
+                        <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <select id="lang-selector" class="lang-select">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी (Hindi)</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                        </select>
+                    </div>
+
+                    <!-- Audio Feedback Toggle Button -->
+                    <button class="btn-icon btn-sound" id="btn-toggle-sound" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+                        <svg class="icon-sound" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    </button>
+
+                    <!-- Dark / Light Theme Toggle Button -->
+                    <button class="btn-icon btn-theme" id="btn-toggle-theme" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+                        <svg class="icon-theme" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+
+                    <!-- 3D Landing Page Link Icon Button -->
+                    <a href="landing.html" class="btn-icon btn-landing-header-link" title="Open 3D Animated Landing Page" aria-label="Open 3D Landing Page">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 12 8"/></svg>
+                    </a>
+
+                    <!-- Quick Demo Button -->
+                    <button class="btn btn-secondary btn-sm" id="btn-quick-demo" data-i18n="btn_demo">
+                        Explore Demo
+                    </button>
+
+                    <!-- Header New Goal Button -->
+                    <button class="btn btn-primary btn-sm btn-header-new" id="btn-header-new-goal" data-i18n="btn_new_goal">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>New Goal</span>
+                    </button>
+
+                    <div class="user-profile-badge" id="user-profile-btn" title="View settings (Ali Jawad)">
+                        <div class="avatar" id="user-avatar-initials">AJ</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Views Container -->
+            <div class="content-body">
+
+                <!-- ============================================== -->
+                <!-- 0. LANDING SCREEN (Shown if no goals yet or explicitly) -->
+                <!-- ============================================== -->
+                <section id="view-landing" class="view-panel hidden">
+                    <div class="hero-section">
+                        <div class="hero-badge">College Project Prototype • Antigravity AI</div>
+                        <h1 class="hero-title"><span data-i18n="hero_title_1">Turn your ambition into an</span> <span class="gradient-text" data-i18n="hero_title_2">achievable plan.</span></h1>
+                        <p class="hero-subtitle" data-i18n="hero_subtitle">
+                            AI-powered goal planning for students who want to stop procrastinating and start progressing. 
+                            Transforms vague wishes into validated SMART goals, dated milestones, and daily micro-tasks.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary btn-lg" id="btn-landing-create" data-i18n="btn_create_my_goal">
+                                Create My Goal
+                            </button>
+                            <button class="btn btn-secondary btn-lg" id="btn-landing-demo" data-i18n="btn_explore_demo_ml">
+                                Explore Demo (Machine Learning)
+                            </button>
+                        </div>
+
+                        <!-- 3 Benefits Cards -->
+                        <div class="benefits-grid">
+                            <div class="benefit-card">
+                                <div class="benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                                <h3 data-i18n="benefit_1_title">Turn Vague Goals into SMART Plans</h3>
+                                <p data-i18n="benefit_1_desc">Generative AI clarifies fuzzy ambitions into concrete metrics, clear evidence of completion, and realistic targets.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <div class="benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                                <h3 data-i18n="benefit_2_title">Deterministic Validation</h3>
+                                <p data-i18n="benefit_2_desc">JavaScript mathematical checks guarantee task dates fit your calendar, exams are respected, and weekly hours aren't exceeded.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <div class="benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                                <h3 data-i18n="benefit_3_title">Effort vs Outcome Tracking</h3>
+                                <p data-i18n="benefit_3_desc">Separate effort spent from actual skill outcome so you never mistake busywork for genuine progress.</p>
+                            </div>
+                        </div>
+
+                        <!-- Animated Achievement Progression Preview -->
+                        <div class="journey-preview-card">
+                            <div class="journey-header">
+                                <span data-i18n="progression_cycle_title">The GoalFlow Progression Cycle</span>
+                                <span class="journey-tag">Autonomous Validation Pipeline</span>
+                            </div>
+                            <div class="journey-steps">
+                                <div class="j-step done">
+                                    <div class="j-circle">1</div>
+                                    <span data-i18n="j_step_1">Vague Goal</span>
+                                </div>
+                                <div class="j-line active"></div>
+                                <div class="j-step active">
+                                    <div class="j-circle">2</div>
+                                    <span data-i18n="j_step_2">AI 5-Stage Plan</span>
+                                </div>
+                                <div class="j-line"></div>
+                                <div class="j-step">
+                                    <div class="j-circle">3</div>
+                                    <span data-i18n="j_step_3">Logic Validator</span>
+                                </div>
+                                <div class="j-line"></div>
+                                <div class="j-step">
+                                    <div class="j-circle">4</div>
+                                    <span data-i18n="j_step_4">User Approval</span>
+                                </div>
+                                <div class="j-line"></div>
+                                <div class="j-step">
+                                    <div class="j-circle">5</div>
+                                    <span data-i18n="j_step_5">100% Achievement</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 1. DASHBOARD VIEW -->
+                <!-- ============================================== -->
+                <section id="view-dashboard" class="view-panel">
+                    <div class="dashboard-greeting-bar">
+                        <div>
+                            <h2 class="page-title" id="greeting-text">Good morning, Ali Jawad</h2>
+                            <p class="text-muted" id="greeting-subtext" data-i18n="greeting_subtext">Here is your goal roadmap and today's next high-leverage action.</p>
+                        </div>
+                        <div class="dashboard-meta-actions">
+                            <span class="live-date-badge" id="current-date-badge">Nov 23, 2026</span>
+                            <button class="btn btn-sm btn-ghost" id="btn-export-quick-json" title="Export JSON"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-i18n="btn_export">Export</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Top Metrics Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Card 1: Current Goal Overview -->
+                        <div class="card card-glow current-goal-card">
+                            <div class="card-header-clean">
+                                <span class="card-label" data-i18n="label_active_goal">CURRENT ACTIVE GOAL</span>
+                                <span class="pill-status pill-ontrack" id="dash-goal-status">ON TRACK</span>
+                            </div>
+                            <h3 class="dash-goal-title" id="dash-goal-title">Become proficient in Machine Learning</h3>
+                            <p class="dash-smart-statement text-muted" id="dash-goal-smart">
+                                Build, train, and deploy 3 end-to-end ML models with >85% accuracy by Dec 28, 2026.
+                            </p>
+                            <div class="goal-stats-row">
+                                <div class="stat-box">
+                                    <span class="stat-number" id="dash-days-remaining">35</span>
+                                    <span class="stat-label" data-i18n="stat_days_left">Days Left</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number" id="dash-weekly-commitment">5.0 hrs</span>
+                                    <span class="stat-label" data-i18n="stat_weekly_budget">Weekly Budget</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number" id="dash-total-tasks-stat">12</span>
+                                    <span class="stat-label" data-i18n="stat_total_tasks">Total Tasks</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number" id="dash-milestones-stat">4</span>
+                                    <span class="stat-label" data-i18n="stat_milestones">Milestones</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Dual Progress (Outcome vs Effort) -->
+                        <div class="card progress-ring-card">
+                            <div class="card-header-clean">
+                                <span class="card-label" data-i18n="label_goal_progress">GOAL PROGRESS</span>
+                                <span class="badge-subtle" id="dash-achievement-level">Building Momentum</span>
+                            </div>
+                            <div class="progress-ring-container">
+                                <svg class="progress-ring" width="130" height="130">
+                                    <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.08)" stroke-width="10" cx="65" cy="65" r="52" fill="transparent"/>
+                                    <circle class="progress-ring-fill" id="dash-progress-circle" stroke="url(#ring-gradient)" stroke-width="10" stroke-linecap="round" cx="65" cy="65" r="52" fill="transparent"/>
+                                    <defs>
+                                        <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#38bdf8"/>
+                                            <stop offset="100%" stop-color="#818cf8"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="ring-text">
+                                    <span class="ring-pct" id="dash-progress-pct">25%</span>
+                                    <span class="ring-sub" data-i18n="label_completed">Completed</span>
+                                </div>
+                            </div>
+                            <div class="dual-progress-meters">
+                                <div class="progress-line-group">
+                                    <div class="line-label">
+                                        <span data-i18n="label_effort_adherence">Effort Adherence</span>
+                                        <strong id="dash-effort-pct">35%</strong>
+                                    </div>
+                                    <div class="mini-bar-track">
+                                        <div class="mini-bar-fill bar-blue" id="dash-effort-bar" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-line-group">
+                                    <div class="line-label">
+                                        <span data-i18n="label_kr_outcome">Key Results Outcome</span>
+                                        <strong id="dash-outcome-pct">25%</strong>
+                                    </div>
+                                    <div class="mini-bar-track">
+                                        <div class="mini-bar-fill bar-purple" id="dash-outcome-bar" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: NEXT ACTION (Primary UX Principle) -->
+                        <div class="card next-action-card">
+                            <div class="card-header-clean">
+                                <span class="card-label next-action-badge" data-i18n="label_todays_focus">TODAY'S FOCUS • NEXT ACTION</span>
+                                <span class="priority-pill priority-high" id="dash-next-priority">HIGH</span>
+                            </div>
+                            <div class="next-action-body">
+                                <h3 id="dash-next-task-title">Setup Python virtual environment and install NumPy, Pandas</h3>
+                                <div class="next-action-meta">
+                                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong id="dash-next-duration">45 mins</strong></span>
+                                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Due: <strong id="dash-next-due">Today</strong></span>
+                                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><span id="dash-next-milestone-tag">M1: Math & Tooling</span></span>
+                                </div>
+                                <div class="next-action-controls">
+                                    <button class="btn btn-success btn-md" id="dash-btn-complete-next" data-i18n="btn_mark_complete">
+                                        Mark Complete
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" id="dash-btn-skip-next" data-i18n="btn_skip_next">
+                                        Skip / Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Next Milestone -->
+                        <div class="card milestone-summary-card">
+                            <div class="card-header-clean">
+                                <span class="card-label" data-i18n="label_upcoming_milestone">UPCOMING MILESTONE</span>
+                                <span class="milestone-date-badge" id="dash-milestone-due">Dec 01, 2026</span>
+                            </div>
+                            <h4 id="dash-milestone-title">M1: Python & Exploratory Data Analysis Mastery</h4>
+                            <p class="text-muted text-sm" id="dash-milestone-criteria">
+                                Acceptance Criteria: Successfully clean a Kaggle CSV dataset and plot 5 distribution charts.
+                            </p>
+                            <div class="milestone-progress-bar-wrap">
+                                <div class="milestone-sub-info">
+                                    <span data-i18n="label_tasks_completed">Tasks completed</span>
+                                    <span id="dash-milestone-task-ratio">2 / 4</span>
+                                </div>
+                                <div class="mini-bar-track">
+                                    <div class="mini-bar-fill bar-emerald" id="dash-milestone-bar" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Weekly Capacity Health Card -->
+                        <div class="card capacity-card">
+                            <div class="card-header-clean">
+                                <span class="card-label" data-i18n="label_workload_capacity">WEEKLY WORKLOAD CAPACITY</span>
+                                <span class="capacity-status-badge status-good" id="dash-capacity-status">Healthy</span>
+                            </div>
+                            <div class="capacity-metrics">
+                                <div class="cap-metric">
+                                    <span class="cap-val" id="dash-planned-hours">4.5h</span>
+                                    <span class="cap-lbl" data-i18n="label_planned_week">Planned This Week</span>
+                                </div>
+                                <div class="cap-divider">/</div>
+                                <div class="cap-metric">
+                                    <span class="cap-val" id="dash-available-hours">5.0h</span>
+                                    <span class="cap-lbl" data-i18n="label_confirmed_avail">Confirmed Availability</span>
+                                </div>
+                            </div>
+                            <div class="mini-bar-track">
+                                <div class="mini-bar-fill bar-cyan" id="dash-capacity-bar" style="width: 90%"></div>
+                            </div>
+                            <p class="text-xs text-muted" id="dash-capacity-hint" data-i18n="capacity_hint">
+                                Planned workload is within your 300 minutes/week limit. Exam blackout dates are protected.
+                            </p>
+                        </div>
+
+                        <!-- Card 6: AI Dynamic Coach Insight -->
+                        <div class="card ai-insight-card">
+                            <div class="card-header-clean">
+                                <span class="card-label ai-label" data-i18n="label_coach_recommendation">AI COACH RECOMMENDATION</span>
+                                <span class="badge-ai-model">Gemini 1.5 Flash</span>
+                            </div>
+                            <p class="ai-insight-text" id="dash-ai-insight-text">
+                                You have 2 tasks scheduled near your midterm exam dates. Moving "Feature Engineering" forward by 2 days will prevent workload fatigue.
+                            </p>
+                            <div class="ai-insight-actions">
+                                <button class="btn btn-sm btn-primary" id="btn-apply-insight" data-i18n="btn_apply_adjustment">Apply Adjustment</button>
+                                <button class="btn btn-sm btn-ghost" id="btn-dismiss-insight" data-i18n="btn_dismiss">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 2. AI PLANNER WIZARD & 5-STAGE PIPELINE -->
+                <!-- ============================================== -->
+                <section id="view-planner" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="planner_title">AI Goal Planning Wizard</h2>
+                            <p class="text-muted" data-i18n="planner_subtitle">Transform raw ambitions into structured, mathematically validated roadmaps.</p>
+                        </div>
+                        <div class="wizard-header-actions">
+                            <button class="btn btn-outline btn-sm" id="btn-load-wizard-example" data-i18n="btn_fill_ml_example">
+                                Fill ML Example
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5-Stage Visual Planning Pipeline Progress Tracker -->
+                    <div class="pipeline-progress-bar">
+                        <div class="pipe-node active" id="pipe-node-1" data-step="1">
+                            <div class="pipe-num">01</div>
+                            <div class="pipe-text" data-i18n="pipe_clarify">Clarify (SMART)</div>
+                        </div>
+                        <div class="pipe-connector"></div>
+                        <div class="pipe-node" id="pipe-node-2" data-step="2">
+                            <div class="pipe-num">02</div>
+                            <div class="pipe-text" data-i18n="pipe_objectives">Objectives & KRs</div>
+                        </div>
+                        <div class="pipe-connector"></div>
+                        <div class="pipe-node" id="pipe-node-3" data-step="3">
+                            <div class="pipe-num">03</div>
+                            <div class="pipe-text" data-i18n="pipe_milestones">Milestones</div>
+                        </div>
+                        <div class="pipe-connector"></div>
+                        <div class="pipe-node" id="pipe-node-4" data-step="4">
+                            <div class="pipe-num">04</div>
+                            <div class="pipe-text" data-i18n="pipe_actions">Actions & Tasks</div>
+                        </div>
+                        <div class="pipe-connector"></div>
+                        <div class="pipe-node" id="pipe-node-5" data-step="5">
+                            <div class="pipe-num">05</div>
+                            <div class="pipe-text" data-i18n="pipe_risks">Risks & Backups</div>
+                        </div>
+                        <div class="pipe-connector"></div>
+                        <div class="pipe-node" id="pipe-node-6" data-step="6">
+                            <div class="pipe-num">06</div>
+                            <div class="pipe-text" data-i18n="pipe_validation">Validation</div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Form Container -->
+                    <div class="card wizard-card">
+                        <!-- Step 1: Goal -->
+                        <div class="wizard-step-pane active" id="wizard-step-1">
+                            <div class="step-badge" data-i18n="w_step_1_of_6">Step 1 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_1_title">What ambition do you want to achieve?</h3>
+                            <p class="step-subtitle" data-i18n="w_step_1_desc">Start vague or specific. The AI assistant will refine it into a measurable target.</p>
+                            
+                            <div class="form-group">
+                                <label for="input-goal-title" data-i18n="label_goal_title">Goal Statement / Title *</label>
+                                <input type="text" id="input-goal-title" class="form-control" placeholder="e.g., Become proficient in Machine Learning, or Crack Web Development Viva" required>
+                                <span class="field-hint" data-i18n="hint_step_1">Tip: Don't worry about being perfectly structured yet; the Clarify stage will refine it.</span>
+                            </div>
+
+                            <div class="wizard-nav-btns">
+                                <div></div>
+                                <button class="btn btn-primary btn-next-step" data-next="2"><span data-i18n="btn_next_why">Next: Your Why</span> &rarr;</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Why / Motivation -->
+                        <div class="wizard-step-pane" id="wizard-step-2">
+                            <div class="step-badge" data-i18n="w_step_2_of_6">Step 2 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_2_title">Why does this goal matter to you?</h3>
+                            <p class="step-subtitle" data-i18n="w_step_2_desc">Understanding your motivation helps the AI gauge required commitment and prioritize key results.</p>
+                            
+                            <div class="form-group">
+                                <label for="input-goal-why" data-i18n="label_goal_why">Motivation & Desired Outcome *</label>
+                                <textarea id="input-goal-why" class="form-control" rows="3" placeholder="e.g., I want to secure an internship next semester and build AI projects for my portfolio."></textarea>
+                            </div>
+
+                            <div class="wizard-nav-btns">
+                                <button class="btn btn-ghost btn-prev-step" data-prev="1">&larr; <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn btn-primary btn-next-step" data-next="3"><span data-i18n="btn_next_level">Next: Experience Level</span> &rarr;</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Current Level -->
+                        <div class="wizard-step-pane" id="wizard-step-3">
+                            <div class="step-badge" data-i18n="w_step_3_of_6">Step 3 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_3_title">What is your current starting point?</h3>
+                            <p class="step-subtitle" data-i18n="w_step_3_desc">Select your existing skill level so task difficulty is calibrated correctly.</p>
+                            
+                            <div class="level-cards-grid">
+                                <label class="level-card">
+                                    <input type="radio" name="wizard-level" value="Beginner" checked>
+                                    <div class="level-content">
+                                        <span class="level-icon level-tag-pill">L1</span>
+                                        <h4 data-i18n="level_beginner">Beginner</h4>
+                                        <p data-i18n="level_beginner_desc">Starting from scratch with zero or minimal prior experience.</p>
+                                    </div>
+                                </label>
+                                <label class="level-card">
+                                    <input type="radio" name="wizard-level" value="Some Experience">
+                                    <div class="level-content">
+                                        <span class="level-icon level-tag-pill">L2</span>
+                                        <h4 data-i18n="level_some_exp">Some Experience</h4>
+                                        <p data-i18n="level_some_exp_desc">Familiar with fundamental concepts, but haven't built complete projects.</p>
+                                    </div>
+                                </label>
+                                <label class="level-card">
+                                    <input type="radio" name="wizard-level" value="Intermediate">
+                                    <div class="level-content">
+                                        <span class="level-icon level-tag-pill">L3</span>
+                                        <h4 data-i18n="level_intermediate">Intermediate</h4>
+                                        <p data-i18n="level_intermediate_desc">Comfortable with core skills; ready for advanced and applied problems.</p>
+                                    </div>
+                                </label>
+                                <label class="level-card">
+                                    <input type="radio" name="wizard-level" value="Advanced">
+                                    <div class="level-content">
+                                        <span class="level-icon level-tag-pill">L4</span>
+                                        <h4 data-i18n="level_advanced">Advanced</h4>
+                                        <p data-i18n="level_advanced_desc">Polishing expertise, targeting optimization, production, and mastery.</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="wizard-nav-btns">
+                                <button class="btn btn-ghost btn-prev-step" data-prev="2">&larr; <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn btn-primary btn-next-step" data-next="4"><span data-i18n="btn_next_time">Next: Time & Schedule</span> &rarr;</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Time Commitment -->
+                        <div class="wizard-step-pane" id="wizard-step-4">
+                            <div class="step-badge" data-i18n="w_step_4_of_6">Step 4 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_4_title">Define your schedule & available capacity</h3>
+                            <p class="step-subtitle" data-i18n="w_step_4_desc">Hard constraints: the AI and validation engine will strictly honor these limits.</p>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="input-start-date" data-i18n="label_start_date">Start Date *</label>
+                                    <input type="date" id="input-start-date" class="form-control" required>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="input-deadline-date" data-i18n="label_target_deadline">Target Deadline *</label>
+                                    <input type="date" id="input-deadline-date" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="input-weekly-minutes" data-i18n="label_weekly_minutes">Weekly Available Time (Minutes) *</label>
+                                    <input type="number" id="input-weekly-minutes" class="form-control" value="300" min="30" step="30" required>
+                                    <span class="field-hint" id="weekly-hours-hint">300 minutes = 5.0 hours/week</span>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="input-session-length" data-i18n="label_session_length">Preferred Session Length (Minutes)</label>
+                                    <select id="input-session-length" class="form-control">
+                                        <option value="30">30 minutes (Micro-bursts)</option>
+                                        <option value="45" selected>45 minutes (Standard focus)</option>
+                                        <option value="60">60 minutes (Deep work)</option>
+                                        <option value="90">90 minutes (Lab / Coding session)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="wizard-nav-btns">
+                                <button class="btn btn-ghost btn-prev-step" data-prev="3">&larr; <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn btn-primary btn-next-step" data-next="5"><span data-i18n="btn_next_constraints">Next: Constraints & Exams</span> &rarr;</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Constraints & Blackout Dates -->
+                        <div class="wizard-step-pane" id="wizard-step-5">
+                            <div class="step-badge" data-i18n="w_step_5_of_6">Step 5 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_5_title">Constraints, blackout dates & busy periods</h3>
+                            <p class="step-subtitle" data-i18n="w_step_5_desc">No tasks will be scheduled during exam blackout days or blackout periods.</p>
+                            
+                            <div class="form-group">
+                                <label for="input-blackout-dates" data-i18n="label_blackout_dates">Exam / Blackout Dates (Comma separated YYYY-MM-DD)</label>
+                                <input type="text" id="input-blackout-dates" class="form-control" placeholder="e.g. 2026-12-10, 2026-12-11, 2026-12-12">
+                                <span class="field-hint" data-i18n="hint_blackouts">Any day where you cannot work on this goal.</span>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="input-resources" data-i18n="label_resources">Available Resources / Tools</label>
+                                    <input type="text" id="input-resources" class="form-control" placeholder="e.g. Laptop, Google Colab, Coursera course">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="input-budget" data-i18n="label_budget">Budget ($ or Free)</label>
+                                    <input type="text" id="input-budget" class="form-control" value="$0 (Free resources only)">
+                                </div>
+                            </div>
+
+                            <div class="wizard-nav-btns">
+                                <button class="btn btn-ghost btn-prev-step" data-prev="4">&larr; <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn btn-primary btn-next-step" data-next="6"><span data-i18n="btn_next_review">Next: Review & Run AI</span> &rarr;</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Review & Trigger 5-Stage AI Plan -->
+                        <div class="wizard-step-pane" id="wizard-step-6">
+                            <div class="step-badge" data-i18n="w_step_6_of_6">Step 6 of 6</div>
+                            <h3 class="step-title" data-i18n="w_step_6_title">Review Constraints & Generate Plan</h3>
+                            <p class="step-subtitle" data-i18n="w_step_6_desc">Review your confirmed inputs before the AI planner builds and validates your roadmap.</p>
+
+                            <div class="review-summary-card">
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_ambition">Goal Ambition:</span>
+                                    <strong class="rev-val" id="rev-goal-title">-</strong>
+                                </div>
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_motivation">Motivation:</span>
+                                    <span class="rev-val" id="rev-goal-why">-</span>
+                                </div>
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_level">Starting Level:</span>
+                                    <span class="rev-val" id="rev-goal-level">-</span>
+                                </div>
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_timeline">Timeline:</span>
+                                    <span class="rev-val" id="rev-goal-dates">-</span>
+                                </div>
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_capacity">Weekly Budget:</span>
+                                    <span class="rev-val" id="rev-goal-capacity">-</span>
+                                </div>
+                                <div class="rev-row">
+                                    <span class="rev-label" data-i18n="rev_blackouts">Blackout Dates:</span>
+                                    <span class="rev-val" id="rev-goal-blackouts">None specified</span>
+                                </div>
+                            </div>
+
+                            <div class="ai-generation-box">
+                                <div class="ai-status-indicator" id="ai-pipeline-status-area">
+                                    <div class="pipeline-status-text">
+                                        Ready to run <strong>5-Stage AI Planning Pipeline</strong>.
+                                    </div>
+                                    <div class="pipeline-loader-spinner hidden" id="pipeline-spinner"></div>
+                                </div>
+
+                                <div class="wizard-nav-btns">
+                                    <button class="btn btn-ghost btn-prev-step" data-prev="5">&larr; <span data-i18n="btn_back">Back to Constraints</span></button>
+                                    <button class="btn btn-primary btn-lg pulse-btn" id="btn-run-ai-pipeline" data-i18n="btn_generate_plan">
+                                        Generate & Validate Plan with AI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generated Plan Preview & Deterministic Validation Results -->
+                    <div class="card plan-result-card hidden" id="plan-result-container">
+                        <div class="card-header-clean">
+                            <div>
+                                <span class="badge-draft">DRAFT PLAN GENERATED</span>
+                                <h3 id="result-plan-title">SMART Goal Roadmap</h3>
+                            </div>
+                            <div class="plan-actions-right">
+                                <button class="btn btn-sm btn-ghost" id="btn-re-run-ai"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span data-i18n="btn_regenerate">Regenerate</span></button>
+                                <button class="btn btn-success btn-md" id="btn-approve-plan" data-i18n="btn_approve_activate">
+                                    Approve & Activate Plan
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Validation Engine Report -->
+                        <div class="validation-report-box" id="validation-report-box">
+                            <div class="val-header">
+                                <h4 data-i18n="val_report_header">Deterministic Validation Engine Report</h4>
+                                <span class="val-badge val-badge-passed" id="val-overall-badge">All Checks Passed</span>
+                            </div>
+                            <div class="val-checks-list" id="val-checks-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <!-- Capacity Mismatch Repair Options (shown if over capacity) -->
+                            <div class="capacity-repair-panel hidden" id="capacity-repair-panel">
+                                <div class="repair-title">Capacity Overload Detected: Workload exceeds weekly budget</div>
+                                <p class="repair-desc">Choose a deterministic repair action:</p>
+                                <div class="repair-buttons-group">
+                                    <button class="btn btn-sm btn-outline" id="btn-repair-reduce">Reduce Scope (Cut lowest priority)</button>
+                                    <button class="btn btn-sm btn-outline" id="btn-repair-extend">Extend Deadline by 2 Weeks</button>
+                                    <button class="btn btn-sm btn-outline" id="btn-repair-increase-time">Increase Weekly Hours</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Generated Plan Tabs -->
+                        <div class="plan-tabs-bar">
+                            <button class="plan-tab-btn active" data-tab="tab-smart">01 SMART Clarification</button>
+                            <button class="plan-tab-btn" data-tab="tab-objectives">02 Objectives & KRs</button>
+                            <button class="plan-tab-btn" data-tab="tab-milestones">03 Milestones</button>
+                            <button class="plan-tab-btn" data-tab="tab-tasks">04 Action Tasks</button>
+                            <button class="plan-tab-btn" data-tab="tab-risks">05 Risks & IF-THEN</button>
+                        </div>
+
+                        <div class="plan-tab-content">
+                            <!-- Tab 1: SMART -->
+                            <div class="plan-tab-pane active" id="tab-smart">
+                                <div class="smart-block">
+                                    <label>Formal SMART Statement:</label>
+                                    <p class="smart-quote" id="plan-smart-statement"></p>
+                                    
+                                    <label>Measurement Metric:</label>
+                                    <p class="text-sm" id="plan-smart-measurement"></p>
+
+                                    <label>Completion Evidence:</label>
+                                    <ul class="bullet-list" id="plan-smart-evidence"></ul>
+
+                                    <label>Clarifying Assumptions:</label>
+                                    <ul class="bullet-list" id="plan-smart-assumptions"></ul>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Objectives -->
+                            <div class="plan-tab-pane" id="tab-objectives">
+                                <div id="plan-objectives-container" class="cards-stack"></div>
+                            </div>
+
+                            <!-- Tab 3: Milestones -->
+                            <div class="plan-tab-pane" id="tab-milestones">
+                                <div id="plan-milestones-container" class="timeline-stack"></div>
+                            </div>
+
+                            <!-- Tab 4: Tasks -->
+                            <div class="plan-tab-pane" id="tab-tasks">
+                                <div id="plan-tasks-container" class="tasks-table-wrap"></div>
+                            </div>
+
+                            <!-- Tab 5: Risks -->
+                            <div class="plan-tab-pane" id="tab-risks">
+                                <div id="plan-risks-container" class="risks-grid"></div>
+                            </div>
+                        </div>
+
+                        <div class="plan-bottom-approval-bar">
+                            <div class="human-in-loop-notice">
+                                <strong>Human-in-the-Loop:</strong> The AI proposes; you retain final authority. 
+                                Approving this plan saves it to your persistent database.
+                            </div>
+                            <button class="btn btn-success btn-lg" id="btn-approve-plan-bottom" data-i18n="btn_approve_activate_long">
+                                Approve & Activate This Plan
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 3. MY GOALS (List, History & Management) -->
+                <!-- ============================================== -->
+                <section id="view-my-goals" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_my_goals">My Goals & Plans</h2>
+                            <p class="text-muted">Manage active, draft, and archived goal roadmaps.</p>
+                        </div>
+                        <div class="panel-header-actions">
+                            <button class="btn btn-primary btn-sm" id="btn-mygoals-create" data-i18n="btn_create_new_goal">+ Create New Goal</button>
+                        </div>
+                    </div>
+
+                    <div class="goals-filters-bar">
+                        <div class="filter-pills">
+                            <button class="filter-pill active" data-filter="all" data-i18n="filter_all">All Goals</button>
+                            <button class="filter-pill" data-filter="active" data-i18n="filter_active">Active</button>
+                            <button class="filter-pill" data-filter="completed" data-i18n="filter_completed">Completed</button>
+                        </div>
+                        <div class="search-wrap">
+                            <input type="text" id="goals-search-input" class="form-control form-control-sm" placeholder="Search goals...">
+                        </div>
+                    </div>
+
+                    <div class="goals-cards-grid" id="my-goals-grid">
+                        <!-- Populated by renderMyGoals() -->
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 4. TIMELINE VIEW -->
+                <!-- ============================================== -->
+                <section id="view-timeline" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_timeline">Milestone Timeline</h2>
+                            <p class="text-muted">Chronological progression of milestones and acceptance criteria.</p>
+                        </div>
+                        <div class="panel-header-actions">
+                            <span class="timeline-date-range" id="timeline-range-badge">Nov 2026 – Dec 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-wrapper">
+                        <div class="interactive-timeline" id="interactive-timeline-container">
+                            <!-- Populated by renderTimeline() -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 5. TASKS VIEW -->
+                <!-- ============================================== -->
+                <section id="view-tasks" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_tasks">Action Tasks</h2>
+                            <p class="text-muted">Breakdown of actionable micro-sessions with duration, dependencies, and dates.</p>
+                        </div>
+                        <div class="panel-header-actions">
+                            <button class="btn btn-primary btn-sm" id="btn-open-add-task-modal" data-i18n="btn_add_manual_task">+ Add Manual Task</button>
+                        </div>
+                    </div>
+
+                    <div class="tasks-toolbar">
+                        <div class="task-filters">
+                            <button class="task-filter-btn active" data-task-filter="all" data-i18n="filter_all">All</button>
+                            <button class="task-filter-btn" data-task-filter="pending" data-i18n="filter_pending">Pending</button>
+                            <button class="task-filter-btn" data-task-filter="completed" data-i18n="filter_completed">Completed</button>
+                            <button class="task-filter-btn" data-task-filter="high" data-i18n="filter_high">High Priority</button>
+                        </div>
+                        <div class="task-stats-summary" id="task-stats-summary-text">
+                            Showing 0 of 0 tasks
+                        </div>
+                    </div>
+
+                    <div class="tasks-table-card card">
+                        <div class="tasks-list" id="active-tasks-list">
+                            <!-- Populated by renderTasks() -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 6. ACHIEVEMENTS & PROGRESS ZONE -->
+                <!-- ============================================== -->
+                <section id="view-progress" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_achievements">Achievement Zone</h2>
+                            <p class="text-muted">Celebrate milestones, unlock levels, and review verified evidence of skill acquisition.</p>
+                        </div>
+                    </div>
+
+                    <div class="achievement-hero-card card">
+                        <div class="achieve-circle-wrap">
+                            <div class="achievement-big-ring">
+                                <svg width="180" height="180">
+                                    <circle stroke="rgba(255,255,255,0.08)" stroke-width="14" cx="90" cy="90" r="72" fill="transparent"/>
+                                    <circle id="achieve-big-fill" stroke="url(#achieve-grad)" stroke-width="14" stroke-linecap="round" cx="90" cy="90" r="72" fill="transparent"/>
+                                    <defs>
+                                        <linearGradient id="achieve-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#38bdf8"/>
+                                            <stop offset="50%" stop-color="#818cf8"/>
+                                            <stop offset="100%" stop-color="#a855f7"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="achieve-ring-label">
+                                    <span class="achieve-big-pct" id="achieve-big-pct">25%</span>
+                                    <span class="achieve-status-name" id="achieve-status-name">Building Momentum</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5 Level Progression Nodes -->
+                        <div class="achieve-levels-track">
+                            <div class="achieve-level-node completed" id="lvl-node-1">
+                                <div class="lvl-icon">01</div>
+                                <span class="lvl-title">Started</span>
+                                <span class="lvl-req">0%</span>
+                            </div>
+                            <div class="lvl-line active"></div>
+                            <div class="achieve-level-node active" id="lvl-node-2">
+                                <div class="lvl-icon">02</div>
+                                <span class="lvl-title">Building Momentum</span>
+                                <span class="lvl-req">25%</span>
+                            </div>
+                            <div class="lvl-line"></div>
+                            <div class="achieve-level-node" id="lvl-node-3">
+                                <div class="lvl-icon">03</div>
+                                <span class="lvl-title">Halfway There</span>
+                                <span class="lvl-req">50%</span>
+                            </div>
+                            <div class="lvl-line"></div>
+                            <div class="achieve-level-node" id="lvl-node-4">
+                                <div class="lvl-icon">04</div>
+                                <span class="lvl-title">Almost There</span>
+                                <span class="lvl-req">75%</span>
+                            </div>
+                            <div class="lvl-line"></div>
+                            <div class="achieve-level-node" id="lvl-node-5">
+                                <div class="lvl-icon">05</div>
+                                <span class="lvl-title">Goal Achieved</span>
+                                <span class="lvl-req">100%</span>
+                            </div>
+                        </div>
+
+                        <!-- 100% Celebration Banner (shown when 100%) -->
+                        <div class="celebration-box hidden" id="celebration-box">
+                            <canvas id="confetti-canvas"></canvas>
+                            <div class="celebration-content">
+                                <h3>GOAL FULLY ACHIEVED &bull; 100% COMPLETE</h3>
+                                <p>You completed all required milestones and verified your key results evidence.</p>
+                                <button class="btn btn-primary btn-md" id="btn-celebrate-new-goal">Start a New Goal &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verified Evidence & Key Results Status -->
+                    <div class="card mt-4">
+                        <div class="card-header-clean">
+                            <span class="card-label">VERIFIED COMPLETION EVIDENCE</span>
+                            <span class="badge-subtle">Outcome Verification</span>
+                        </div>
+                        <div class="evidence-list" id="achievements-evidence-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 7. WEEKLY REVIEW & AI COACH -->
+                <!-- ============================================== -->
+                <section id="view-review" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_review">Weekly Review & AI Coach</h2>
+                            <p class="text-muted">Reflect on accomplishments, identify blockers, and receive structured schedule adjustments.</p>
+                        </div>
+                    </div>
+
+                    <div class="review-grid">
+                        <div class="card review-form-card">
+                            <h3 class="card-title">Weekly Check-in Form</h3>
+                            <p class="text-muted text-sm">Answer these 5 reflection questions to recalibrate your plan.</p>
+
+                            <div class="form-group">
+                                <label for="rev-q1">1. What was completed this week?</label>
+                                <textarea id="rev-q1" class="form-control" rows="2" placeholder="Tasks, practice sessions, code written..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rev-q2">2. What blocked your progress or caused delays?</label>
+                                <textarea id="rev-q2" class="form-control" rows="2" placeholder="e.g. Tough assignment, debugging bug, lack of time..."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="rev-q3">3. Actual Time Spent (Minutes)</label>
+                                    <input type="number" id="rev-q3" class="form-control" value="240">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="rev-q4">4. Evidence Produced</label>
+                                    <input type="text" id="rev-q4" class="form-control" placeholder="e.g. GitHub commit link, notes, test run">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rev-q5">5. What should change next week?</label>
+                                <textarea id="rev-q5" class="form-control" rows="2" placeholder="e.g. Dedicate mornings to deep work, eliminate distractions..."></textarea>
+                            </div>
+
+                            <button class="btn btn-primary btn-md" id="btn-submit-review">
+                                Ask AI Coach to Analyze & Adjust Schedule
+                            </button>
+                        </div>
+
+                        <!-- AI Coach Feedback & Proposed Adjustments -->
+                        <div class="card review-feedback-card">
+                            <div class="card-header-clean">
+                                <span class="card-label ai-label">AI COACH ANALYSIS</span>
+                                <span class="badge-subtle" id="coach-review-date">Pending Submission</span>
+                            </div>
+                            <div class="coach-analysis-body" id="coach-analysis-body">
+                                <div class="empty-state-text">
+                                    Submit your weekly check-in on the left to receive an AI coaching breakdown and concrete recovery adjustments.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 8. PROMPT LAB (REQUIRED FOR COLLEGE DEMO & VIVA) -->
+                <!-- ============================================== -->
+                <section id="view-prompt-lab" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <span class="viva-badge">COLLEGE VIVA REQUIREMENT</span>
+                            <h2 class="page-title" data-i18n="nav_prompt_lab">Prompt Engineering Lab</h2>
+                            <p class="text-muted">
+                                Interactive comparison of structured prompting techniques, comparative outputs, and deterministic validator repairs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Prompt Engineering Techniques Tabs -->
+                    <div class="prompt-lab-tabs">
+                        <button class="p-tab active" data-ptab="zero-shot">01 Zero-Shot</button>
+                        <button class="p-tab" data-ptab="one-shot">02 One-Shot</button>
+                        <button class="p-tab" data-ptab="few-shot">03 Few-Shot</button>
+                        <button class="p-tab" data-ptab="role-based">04 Role-Based</button>
+                        <button class="p-tab" data-ptab="contextual">05 Contextual Constraints</button>
+                        <button class="p-tab" data-ptab="iterative">06 Iterative Repair</button>
+                        <button class="p-tab p-tab-highlight" data-ptab="comparison">Baseline vs GoalFlow</button>
+                    </div>
+
+                    <!-- Prompt Lab Content Display Area -->
+                    <div class="card prompt-lab-card" id="prompt-lab-container">
+                        <!-- Populated dynamically by renderPromptLab() -->
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 9. SETTINGS VIEW -->
+                <!-- ============================================== -->
+                <section id="view-settings" class="view-panel hidden">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="page-title" data-i18n="nav_settings">System & AI Settings</h2>
+                            <p class="text-muted">Configure profile, Gemini API access, themes, language, and backend server.</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-grid">
+                        <!-- Profile Card -->
+                        <div class="card">
+                            <h3 class="card-title">User Profile</h3>
+                            <div class="form-group">
+                                <label for="settings-username">Display Name</label>
+                                <input type="text" id="settings-username" class="form-control" value="Ali Jawad">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-timezone">Timezone</label>
+                                <select id="settings-timezone" class="form-control">
+                                    <option value="Asia/Kolkata">Asia/Kolkata (GMT+5:30)</option>
+                                    <option value="UTC">UTC</option>
+                                    <option value="America/New_York">America/New_York (EST)</option>
+                                    <option value="Europe/London">Europe/London (GMT)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-def-capacity">Default Weekly Capacity (Minutes)</label>
+                                <input type="number" id="settings-def-capacity" class="form-control" value="300">
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="btn-save-profile">Save Profile Settings</button>
+                        </div>
+
+                        <!-- Backend & AI Security Card -->
+                        <div class="card">
+                            <h3 class="card-title">Backend & AI Configuration</h3>
+                            <p class="text-muted text-sm">
+                                Managed securely via <code>server/server.js</code> &amp; <code>.env</code>. Secrets are never exposed to client browsers.
+                            </p>
+                            <div class="backend-info-box">
+                                <div class="info-row">
+                                    <span>Server Status:</span>
+                                    <strong id="settings-server-status">Detecting...</strong>
+                                </div>
+                                <div class="info-row">
+                                    <span>API Endpoint:</span>
+                                    <code>http://localhost:3000/api</code>
+                                </div>
+                                <div class="info-row">
+                                    <span>Model:</span>
+                                    <code>gemini-1.5-flash</code>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="settings-api-key">Gemini API Key (Loaded from .env / Local Override)</label>
+                                <div class="input-password-wrap">
+                                    <input type="password" id="settings-api-key" class="form-control font-mono" placeholder="AQ.Ab8RN6Jm...">
+                                    <button class="btn-icon" id="btn-toggle-key-visibility" title="Show/Hide"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                </div>
+                            </div>
+                            <div class="button-row">
+                                <button class="btn btn-secondary btn-sm" id="btn-test-api">Test Connection</button>
+                                <button class="btn btn-primary btn-sm" id="btn-save-api">Update Key</button>
+                            </div>
+                        </div>
+
+                        <!-- Data Management & Privacy Notice -->
+                        <div class="card">
+                            <h3 class="card-title">Data Storage & Export</h3>
+                            <p class="text-muted text-sm">
+                                <strong>Privacy Notice:</strong> All goal roadmaps, tasks, and reviews are stored locally in your server/browser storage. 
+                                No personal data is sent externally except during authenticated Gemini plan generation.
+                            </p>
+                            <div class="button-stack mt-3">
+                                <button class="btn btn-outline btn-sm btn-full" id="btn-export-all-json">
+                                    Export Complete Data (JSON)
+                                </button>
+                                <button class="btn btn-outline btn-sm btn-full" id="btn-export-markdown">
+                                    Export Active Goal (Markdown)
+                                </button>
+                                <button class="btn btn-danger btn-sm btn-full" id="btn-clear-all-data">
+                                    Reset / Clear All Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- College Viva Demonstration Quick Reference -->
+                        <div class="card">
+                            <div class="card-header-clean">
+                                <span class="card-label">VIVA DEMO CHECKLIST</span>
+                            </div>
+                            <ul class="viva-checklist text-sm">
+                                <li>&bull; <strong>Full-Stack Backend:</strong> Node.js server with REST API &amp; Gemini proxy.</li>
+                                <li>&bull; <strong>Multi-Language (i18n):</strong> English, Hindi (हिन्दी), Spanish, French live switching.</li>
+                                <li>&bull; <strong>Command Palette:</strong> Press <code>⌘K</code> or <code>Ctrl+K</code> for quick navigation.</li>
+                                <li>&bull; <strong>5-Stage Pipeline:</strong> Clarify &rarr; Objectives &rarr; Milestones &rarr; Tasks &rarr; Risks.</li>
+                                <li>&bull; <strong>Deterministic Validation:</strong> Capacity load balancing, blackout date guard, DAG cycle checks.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+            </div> <!-- /content-body -->
+
+            <!-- Global Footer & Responsible AI Disclaimer -->
+            <footer class="app-footer">
+                <div class="footer-content">
+                    <span>GoalFlow AI &copy; 2026 • Full-Stack College Project</span>
+                    <span class="footer-disclaimer">
+                        GoalFlow AI provides planning assistance, not guaranteed outcomes. AI-generated suggestions may contain mistakes. Review your plan before acting on it.
+                    </span>
+                    <span class="storage-tag" id="footer-storage-tag">Node Backend + LocalStorage</span>
+                </div>
+            </footer>
+        </main>
+    </div> <!-- /app-container -->
+
+    <!-- ============================================== -->
+    <!-- FLOATING "ASK GOALFLOW" AI COACH ASSISTANT -->
+    <!-- ============================================== -->
+    <div class="floating-coach-wrap" id="floating-coach-wrap">
+        <button class="coach-trigger-btn" id="coach-trigger-btn" title="Ask GoalFlow AI Coach">
+            <span class="sparkle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z"/></svg></span>
+            <span class="coach-btn-text" data-i18n="coach_btn">Ask GoalFlow</span>
+        </button>
+
+        <div class="coach-chat-window hidden" id="coach-chat-window">
+            <div class="coach-chat-header">
+                <div class="coach-header-left">
+                    <span class="coach-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg></span>
+                    <div>
+                        <h4>GoalFlow AI Coach</h4>
+                        <span class="coach-context-tag" id="coach-goal-context-tag">Context: Active Goal</span>
+                    </div>
+                </div>
+                <button class="btn-icon btn-close-coach" id="btn-close-coach"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+
+            <!-- Quick Viva / Coaching Action Prompts -->
+            <div class="coach-quick-prompts">
+                <button class="quick-chip" data-prompt="Why am I behind on my goal?" data-i18n="chip_why_behind">Why am I behind?</button>
+                <button class="quick-chip" data-prompt="What should I focus on doing today?" data-i18n="chip_what_today">What should I do today?</button>
+                <button class="quick-chip" data-prompt="Can I finish my goal on time with my current pace?" data-i18n="chip_finish_on_time">Can I finish on time?</button>
+                <button class="quick-chip" data-prompt="Help me recover after missing a whole week of study." data-i18n="chip_recover_week">Recover from missed week</button>
+            </div>
+
+            <div class="coach-messages-body" id="coach-messages-body">
+                <div class="coach-msg coach-msg-assistant">
+                    Hello! I'm your GoalFlow AI coach. I have full context on your approved plan, deadlines, and remaining tasks. 
+                    How can I help you progress today?
+                </div>
+            </div>
+
+            <div class="coach-input-bar">
+                <input type="text" id="coach-input-text" placeholder="Ask about your schedule, pace, or tasks...">
+                <button class="btn btn-primary btn-sm" id="btn-send-coach">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: COMMAND PALETTE (CMD+K / CTRL+K) -->
+    <!-- ============================================== -->
+    <div class="modal-overlay hidden" id="command-palette-modal">
+        <div class="command-palette-card">
+            <div class="cmd-search-bar">
+                <span class="cmd-search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+                <input type="text" id="cmd-palette-input" placeholder="Type a command or search (e.g., 'dashboard', 'hindi', 'tasks', 'export')..." autocomplete="off">
+                <kbd class="cmd-esc-tag">ESC</kbd>
+            </div>
+            <div class="cmd-palette-results" id="cmd-palette-results">
+                <!-- Populated dynamically by setupCommandPalette() -->
+            </div>
+            <div class="cmd-palette-footer">
+                <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+                <span><kbd>↵</kbd> to execute</span>
+                <span><kbd>ESC</kbd> to close</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: ADD / EDIT TASK -->
+    <!-- ============================================== -->
+    <div class="modal-overlay hidden" id="task-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="task-modal-title">Add Manual Task</h3>
+                <button class="btn-icon modal-close-btn" id="btn-close-task-modal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modal-task-id">
+                <div class="form-group">
+                    <label for="modal-task-title">Task Title *</label>
+                    <input type="text" id="modal-task-title" class="form-control" placeholder="e.g. Implement Logistic Regression loss function" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="modal-task-date">Scheduled Date *</label>
+                        <input type="date" id="modal-task-date" class="form-control" required>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="modal-task-duration">Duration (Minutes) *</label>
+                        <input type="number" id="modal-task-duration" class="form-control" value="45" min="10" step="5" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="modal-task-priority">Priority</label>
+                        <select id="modal-task-priority" class="form-control">
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="modal-task-milestone">Assigned Milestone</label>
+                        <select id="modal-task-milestone" class="form-control">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-cancel-task-modal">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-task-modal">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: load config.js with API key fallback, then core AI.js -->
+    <script src="config.js"></script>
+    <script src="AI.js"></script>
+</body>
+</html>
